@@ -1,0 +1,19 @@
+{
+    "name": "zacharyrankin/starter-vanilla-php",
+    "description": "Starting point for a vanilla php application",
+    "type": "project",
+    "license": "MIT",
+    "autoload": {
+        "files": ["src/db_functions.php"],
+        "psr-4": {
+            "App\\": "src/"
+        }
+    },
+    "authors": [
+        {
+            "name": "Zachary Rankin",
+            "email": "rankin.zachary@gmail.com"
+        }
+    ],
+    "require": {}
+}
