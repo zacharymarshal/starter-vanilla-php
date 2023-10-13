@@ -13,9 +13,10 @@ Starting point for a vanilla php application.
 
 ### Getting started
 
-1. Run `docker compose up`
-2. Install Composer dependencies `docker compose exec php-fpm composer install`
-3. Go to http://localhost:50080/ to see things a working
+1. Create environment file `cp .env.default .env`
+2. Run `docker compose up`
+3. Install Composer dependencies `docker compose exec php-fpm composer install`
+4. Go to http://localhost:50080/ to see things a working
 
 ### Useful Commands
 
