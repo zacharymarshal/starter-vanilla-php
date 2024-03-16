@@ -1,22 +1,29 @@
 <?php
 
-// https://getcomposer.org/doc/01-basic-usage.md#autoloading
-require_once __DIR__ . "/../vendor/autoload.php";
+["db" => $db] = require_once __DIR__ . "/../src/app.php";
 
-use App\SayIt;
+$is_login_error = $_SESSION["login_error"] ?? false;
+unset($_SESSION["login_error"]);
 
-use function Db\db;
-use function Db\query;
+if (isset($_SESSION["user_id"])) {
+    header("Location: /dashboard.php");
+    exit;
+}
 
-$db = db((string) getenv("DATABASE_URL"));
-
-$res = query(
-    $db(),
-    <<<'SQL'
-        SELECT NOW()
-        SQL
-);
-$ts = pg_fetch_row($res) ?: [];
-
-$sayIt = new SayIt("Welcome! The time is {$ts[0]}");
-$sayIt->speak();
+?>
+<!DOCTYPE html>
+<html>
+<head>
+    <title>PHP Test</title>
+</head>
+<body>
+    <?php if ($is_login_error): ?>
+        <p>Login failed</p>
+    <?php endif; ?>
+    <form action="login.php" method="post">
+        <label for="email">Email:</label>
+        <input type="email" id="email" name="email">
+        <input type="submit" value="Login">
+    </form>
+    </body>
+</html>
