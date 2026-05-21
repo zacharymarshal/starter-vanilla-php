@@ -15,5 +15,7 @@
             "email": "rankin.zachary@gmail.com"
         }
     ],
-    "require": {}
+    "require": {
+        "php": "^8.5"
+    }
 }

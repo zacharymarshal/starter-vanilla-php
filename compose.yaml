@@ -1,0 +1,50 @@
+services:
+  nginx:
+    image: nginx:1.30-alpine
+    restart: unless-stopped
+    volumes:
+      - .:/app
+      - ./docker/nginx/app.conf:/etc/nginx/conf.d/default.conf:ro
+    ports:
+      - 50080:80
+    depends_on:
+      php-fpm:
+        condition: service_started
+
+  postgres:
+    image: postgres:18.4-alpine
+    restart: unless-stopped
+    ports:
+      - 50032:5432
+    environment:
+      PGDATA: /var/lib/postgresql/data/pgdata
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: postgres
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres -d postgres"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  php-fpm:
+    build: docker/php
+    restart: unless-stopped
+    volumes:
+      - .:/app
+      - composer-cache:/root/.composer
+      - ./docker/php/php.ini:/usr/local/etc/php/conf.d/zz-app.ini:ro
+      - xdebug-output:/xdebug
+    expose:
+      - 9000
+    env_file:
+      - .env
+    depends_on:
+      postgres:
+        condition: service_healthy
+
+volumes:
+  postgres-data:
+  composer-cache:
+  xdebug-output:
